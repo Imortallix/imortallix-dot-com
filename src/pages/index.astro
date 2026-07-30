@@ -1,0 +1,37 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+
+const allProjects = await getCollection('projects');
+const featured = allProjects
+  .filter((p) => p.data.featured)
+  .sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout title="Imortallix">
+  <section>
+    <h1>Gavin Frings</h1>
+    <p>
+      I build small games, bots, and analyses for fun. This is where I keep
+      them.
+    </p>
+  </section>
+
+  <section>
+    <h2>Projects</h2>
+    <div class="card-grid">
+      {
+        featured.map((project) => (
+          <ProjectCard
+            slug={project.id}
+            title={project.data.title}
+            blurb={project.data.blurb}
+            tech={project.data.tech}
+            status={project.data.status}
+          />
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
